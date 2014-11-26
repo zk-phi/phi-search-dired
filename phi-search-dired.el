@@ -52,6 +52,7 @@
 (defun phi-search-dired--filter-function ()
   (text-property-not-all (match-beginning 0) (match-end 0) 'dired-filename nil))
 
+;;;###autoload
 (defun phi-search-dired ()
   "Filter files in dired buffer with phi-search interface."
   (interactive)
