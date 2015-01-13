@@ -59,8 +59,7 @@
   (dired-unmark-all-marks)
   (phi-search--initialize
    '(" *phi-search-dired*"
-     (:eval (phi-search--with-target-buffer
-             (format " [ %d ]" (length phi-search--overlays)))))
+     (:eval (format " [ %d ]" (length phi-search--overlays))))
    '(((kbd "SPC") . 'phi-search-dired-restrict-to-matches))
    'phi-search-dired--filter-function
    nil
@@ -69,7 +68,7 @@
 (defun phi-search-dired-restrict-to-matches ()
   "Hide unmached lines in phi-search-dired."
   (interactive)
-  (if (string= (buffer-string) "")
+  (if (string= (minibuffer-contents) "")
       (phi-search-complete)
     (phi-search--with-target-buffer
      (dolist (ov phi-search--overlays)
