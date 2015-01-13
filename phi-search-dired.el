@@ -18,8 +18,8 @@
 
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
-;; Version: 1.0.0
-;; Package-Requires: ((phi-search "2.1.1"))
+;; Version: 1.1.0
+;; Package-Requires: ((phi-search "2.2.0"))
 
 ;;; Commentary:
 
@@ -30,6 +30,7 @@
 ;;; Change Log:
 
 ;; 1.0.0 first release
+;; 1.1.0 compatibility with phi-search-core 2.0.0
 
 ;;; Code:
 
@@ -37,7 +38,7 @@
 (require 'dired-aux)
 (require 'phi-search-core)
 
-(defconst phi-search-dired-version "1.0.0")
+(defconst phi-search-dired-version "1.1.0")
 
 (defun phi-search-dired--complete-function ()
   (phi-search--with-target-buffer
@@ -77,7 +78,7 @@
          (dired-mark 1)))
      (dired-toggle-marks)
      (dired-do-kill-lines))
-    (delete-region (point-min) (point-max))))
+    (delete-region (minibuffer-prompt-end) (point-max))))
 
 (provide 'phi-search-dired)
 
