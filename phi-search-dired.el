@@ -18,8 +18,8 @@
 
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
-;; Version: 1.0.0
-;; Package-Requires: ((phi-search "2.1.1"))
+;; Version: 1.1.0
+;; Package-Requires: ((phi-search "2.2.0"))
 
 ;;; Commentary:
 
@@ -30,6 +30,7 @@
 ;;; Change Log:
 
 ;; 1.0.0 first release
+;; 1.1.0 compatibility with phi-search-core 2.0.0
 
 ;;; Code:
 
@@ -37,7 +38,7 @@
 (require 'dired-aux)
 (require 'phi-search-core)
 
-(defconst phi-search-dired-version "1.0.0")
+(defconst phi-search-dired-version "1.1.0")
 
 (defun phi-search-dired--complete-function ()
   (phi-search--with-target-buffer
@@ -59,8 +60,7 @@
   (dired-unmark-all-marks)
   (phi-search--initialize
    '(" *phi-search-dired*"
-     (:eval (phi-search--with-target-buffer
-             (format " [ %d ]" (length phi-search--overlays)))))
+     (:eval (format " [ %d ]" (length phi-search--overlays))))
    '(((kbd "SPC") . 'phi-search-dired-restrict-to-matches))
    'phi-search-dired--filter-function
    nil
@@ -69,7 +69,7 @@
 (defun phi-search-dired-restrict-to-matches ()
   "Hide unmached lines in phi-search-dired."
   (interactive)
-  (if (string= (buffer-string) "")
+  (if (string= (minibuffer-contents) "")
       (phi-search-complete)
     (phi-search--with-target-buffer
      (dolist (ov phi-search--overlays)
@@ -78,7 +78,7 @@
          (dired-mark 1)))
      (dired-toggle-marks)
      (dired-do-kill-lines))
-    (delete-region (point-min) (point-max))))
+    (delete-region (minibuffer-prompt-end) (point-max))))
 
 (provide 'phi-search-dired)
 
