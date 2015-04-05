@@ -18,7 +18,7 @@
 
 ;; Author: zk_phi
 ;; URL: http://hins11.yu-yake.com/
-;; Version: 1.1.0
+;; Version: 1.1.1
 ;; Package-Requires: ((phi-search "2.2.0"))
 
 ;;; Commentary:
@@ -31,6 +31,7 @@
 
 ;; 1.0.0 first release
 ;; 1.1.0 compatibility with phi-search-core 2.0.0
+;; 1.1.1 add `phi-search-dired-backspace-or-undo' command
 
 ;;; Code:
 
@@ -38,7 +39,15 @@
 (require 'dired-aux)
 (require 'phi-search-core)
 
-(defconst phi-search-dired-version "1.1.0")
+(defconst phi-search-dired-version "1.1.1")
+
+(defmacro phi-search-dired--with-silent-message (&rest body)
+  `(let ((original-message-fn (symbol-function 'message)))
+     (unwind-protect
+         (progn
+           (fset 'message (lambda (&rest _) nil))
+           ,@body)
+       (fset 'message original-message-fn))))
 
 (defun phi-search-dired--complete-function ()
   (phi-search--with-target-buffer
@@ -61,7 +70,8 @@
   (phi-search--initialize
    '(" *phi-search-dired*"
      (:eval (format " [ %d ]" (length phi-search--overlays))))
-   '(((kbd "SPC") . 'phi-search-dired-restrict-to-matches))
+   '(((kbd "SPC") . 'phi-search-dired-restrict-to-matches)
+     ((kbd "DEL") . 'phi-search-dired-backspace-or-undo))
    'phi-search-dired--filter-function
    nil
    'phi-search-dired--complete-function))
@@ -79,6 +89,13 @@
      (dired-toggle-marks)
      (dired-do-kill-lines))
     (delete-region (minibuffer-prompt-end) (point-max))))
+
+(defun phi-search-dired-backspace-or-undo ()
+  (interactive)
+  (if (= (minibuffer-prompt-end) (point))
+      (phi-search-dired--with-silent-message
+       (phi-search--with-target-buffer (dired-undo)))
+    (backward-delete-char 1)))
 
 (provide 'phi-search-dired)
 

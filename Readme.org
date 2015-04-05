@@ -27,6 +27,11 @@ to the normal phi-search keybinds.
 
   Hide all unmached items.
 
+- [DEL] phi-search-dired-backspace-or-undo
+
+  If there's a character before the point, delete it. Otherwise undo
+  restriction (show hidden items again).
+
 If you quit phi-search window with [RET], then all matching items are
 marked. To quit without doing anything more than filtering, quit with
 [C-g].
