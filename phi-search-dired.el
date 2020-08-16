@@ -42,12 +42,8 @@
 (defconst phi-search-dired-version "1.1.1")
 
 (defmacro phi-search-dired--with-silent-message (&rest body)
-  `(let ((original-message-fn (symbol-function 'message)))
-     (unwind-protect
-         (progn
-           (fset 'message (lambda (&rest _) nil))
-           ,@body)
-       (fset 'message original-message-fn))))
+  `(let ((inhibit-message t))
+     ,@body))
 
 (defun phi-search-dired--complete-function ()
   (phi-search--with-target-buffer
